@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "131356970363",
+    "firebase_url": "https://cool-project-flutter-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "cool-project-flutter",
+    "storage_bucket": "cool-project-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131356970363:android:36fe219fba0fc01d7ec1de",
+        "android_client_info": {
+          "package_name": "com.example.masizamanngezip"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu_adahDsRrLrvqb6wcbdh2MNWXK1hu_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131356970363:android:80fa763d438041d27ec1de",
+        "android_client_info": {
+          "package_name": "com.example.ticket_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu_adahDsRrLrvqb6wcbdh2MNWXK1hu_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
