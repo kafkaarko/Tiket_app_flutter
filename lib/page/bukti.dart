@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_app/page/list_tiket.dart';
 import 'package:ticket_app/services/firebase.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class Bon extends StatefulWidget {
   final String idTiket;
@@ -12,6 +14,46 @@ class Bon extends StatefulWidget {
 
 class _BonState extends State<Bon> {
   final FirestoreService service = FirestoreService();
+
+  Future<void> generatePdf(Map<String, dynamic> data) async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build:
+            (context) => pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Center(
+                  child: pw.Text(
+                    "Bukti Pembayaran Tiket",
+                    style: pw.TextStyle(
+                      fontSize: 24,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                ),
+                pw.SizedBox(height: 20),
+                pw.Text("Nama Tiket: ${data['nama_tiket']}"),
+                pw.Text("Kategori: ${data['kategori']}"),
+                pw.Text("Harga Tiket: Rp. ${data['harga']}"),
+                pw.Divider(),
+                pw.Text(
+                  "Total Pembayaran: Rp. ${data['harga']}",
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                ),    
+                pw.SizedBox(height: 30),
+                pw.Text("Terima kasih telah membeli tiket."),
+              ],
+            ),
+      ),
+    );
+
+    await Printing.sharePdf(
+      bytes: await pdf.save(),
+      filename: 'bukti_pembayaran_${data['nama_tiket']}.pdf',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,117 +90,77 @@ class _BonState extends State<Bon> {
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.check_circle_outline,
-                          color: Colors.green,
-                          size: 70,
-                        ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          "Transaksi kamu telah berhasil!",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Text(
-                          "Detail pembelian ada di bawah ini.",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        const Divider(height: 30, thickness: 1.2),
-
-                        /// Nama Tiket dan Harga sejajar
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "Nama Tiket:",
+                            const Icon(
+                              Icons.check_circle_outline,
+                              color: Colors.green,
+                              size: 70,
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
+                              "Transaksi kamu telah berhasil!",
                               style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[700],
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
-                              "${data['nama_tiket']}",
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            const Text(
+                              "Transaksi kamu telah\n Detail pembelian ada di bawah ini..",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 14),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
+                            const SizedBox(height: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(data['nama_tiket']),
+                                    const SizedBox(width: 10),
+                                    Text("${data['harga']}"),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(data['kategori']),
+                              ],
+                            ),
 
-                        /// Kategori
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Kategori:",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                            Text(
-                              "${data['kategori']}",
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
+                            const SizedBox(height: 20),
 
-                        /// Harga Tiket
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Harga Tiket:",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                            Text(
-                              "Rp. ${data['harga']}",
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        /// Total dengan icon uang
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                            /// Total
                             Row(
-                              children: const [
-                                Icon(Icons.attach_money, color: Colors.blue),
-                                SizedBox(width: 6),
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.attach_money,
+                                      color: Colors.blue,
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      "Total Pembayaran:",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 Text(
-                                  "Total Pembayaran:",
-                                  style: TextStyle(
+                                  "Rp. ${data['harga']}",
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
-                            ),
-                            Text(
-                              "Rp. ${data['harga']}",
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
                             ),
                           ],
                         ),
@@ -198,17 +200,17 @@ class _BonState extends State<Bon> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: () {
+                          onPressed: () async {
+                            await generatePdf(data);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text(
-                                  "Bukti berhasil didownload",
+                              const SnackBar(
+                                content: Text(
+                                  "Bukti pembayaran berhasil diunduh!",
                                 ),
                                 backgroundColor: Colors.green,
                                 behavior: SnackBarBehavior.floating,
                               ),
                             );
-                            // fitur unduh nanti bisa ditambahkan
                           },
                           icon: const Icon(Icons.download),
                           label: const Text("Unduh Bukti"),
@@ -224,12 +226,28 @@ class _BonState extends State<Bon> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 30),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  /// Widget helper untuk baris informasi
+  Widget buildRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontSize: 15, color: Colors.grey[700])),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
+        ],
       ),
     );
   }

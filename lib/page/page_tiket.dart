@@ -12,8 +12,9 @@ class PageTiket extends StatelessWidget {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(image: const AssetImage("images/cwe.jpg")),
+            Image(image: const AssetImage("images/cwe2.png"), height: 331,width: 230),
             const Text(
               "Ticket APP",
               style: TextStyle(
@@ -24,7 +25,8 @@ class PageTiket extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             const Text(
-              "Membantu anda untuk membeli Tiket dengan mudah dan efesien",
+              "Membantu anda untuk \n manajemen pembelian tiket agar \n mudah dan efesien",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
                 wordSpacing: 0.5,
@@ -34,13 +36,13 @@ class PageTiket extends StatelessWidget {
             const SizedBox(height: 30),
 
             SizedBox(
-              width: double.infinity, // tombol selebar parent (kolom)
+              width: 1200, // tombol selebar parent (kolom)
               height: 50, // tinggi tombol
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>  ListTicket()),
+                    MaterialPageRoute(builder: (context) => ListTicket()),
                   );
                 },
                 style: TextButton.styleFrom(
@@ -51,7 +53,7 @@ class PageTiket extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: const Text("Beli Tiket"),
+                child: const Text("Get Started"),
               ),
             ),
           ],

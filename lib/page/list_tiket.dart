@@ -77,9 +77,26 @@ class _ListTicketState extends State<ListTicket> {
                       ),
                     ],
                   ),
-                  trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blue),
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      
+                       mainAxisSize: MainAxisSize.min, // <== Tambahkan ini
+                      children: [
+                        const Icon(Icons.shopping_cart_checkout, color: Colors.white),
+                     const Text(
+                      "beli",
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                      ],
+                    ),
+                  ),
                   onTap: () {
-                    final docId = docs[index].id;
+                    final docId = docs[index].id; 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
