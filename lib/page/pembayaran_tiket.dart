@@ -32,91 +32,98 @@ class _PembayaranTiketState extends State<PembayaranTiket> {
     return formatter.format(amount);
   }
 
-void _showMetodePembayaranModal(
-  BuildContext context,
-  String metode,
-  String deskripsi,
-  String imagePath,
-) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: const Icon(Icons.close, size: 24),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Image.asset(imagePath, height: 100),
-              const SizedBox(height: 20),
-              if (metode == "Kartu Kredit")
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.blue[700],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      "8810 7766 1234 9876",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                    Icon(Icons.copy, color: Colors.white, size: 16),
-                  ],
-                ),
-              ),
-              Text(
-                metode,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                deskripsi,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context); // tutup dialog
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Bon(idTiket: widget.idTiket),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text("Konfirmasi Pembayaran",style: TextStyle(color: Colors.white),),
-              ),
-            ],
+  void _showMetodePembayaranModal(
+    BuildContext context,
+    String metode,
+    String deskripsi,
+    String imagePath,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-        ),
-      );
-    },
-  );
-}
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const Icon(Icons.close, size: 24),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Image.asset(imagePath, height: 100),
+                const SizedBox(height: 20),
+                if (metode == "Kartu Kredit")
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "8810 7766 1234 9876",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        ),
+                        const SizedBox(width: 20),
+                        Icon(Icons.copy, color: Colors.black, size: 16),
+                      ],
+                    ),
+                  ),
+                Text(
+                  metode,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(deskripsi, textAlign: TextAlign.center),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    await service.addPembelian(widget.idTiket, Timestamp.now());
+                    Navigator.pop(context); // tutup dialog
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Bon(idTiket: widget.idTiket),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    "Konfirmasi Pembayaran",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,36 +199,38 @@ void _showMetodePembayaranModal(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                         
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                               Text(
-                            "Nama Pesanan",
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
                               Text(
-                            "${data['nama_tiket']} - ${data['kategori']}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                                "Nama Pesanan",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                              Text(
+                                "${data['nama_tiket']} - ${data['kategori']}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
-                          
+
                           const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                            "Tanggal",
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                          Text(
-                            _formatTanggal(data['tanggal']),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                                "Tanggal",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                              Text(
+                                _formatTanggal(data['tanggal']),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
-                          
                         ],
                       ),
                     ],
@@ -250,7 +259,7 @@ void _showMetodePembayaranModal(
                   onTap:
                       () => _showMetodePembayaranModal(
                         context,
-                        
+
                         "Kartu Kredit",
                         "Pastikan nominal dan tujuan pembayaran sudah benar sebelum melanjutkan.",
                         'images/debit.png',

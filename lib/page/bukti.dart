@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ticket_app/page/list_pembayaran%20copy.dart';
 import 'package:ticket_app/page/list_tiket.dart';
 import 'package:ticket_app/services/firebase.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -190,6 +191,27 @@ class _BonState extends State<Bon> {
                           label: const Text("Kembali"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListPembelian(),
+                              ),
+                            );
+                          },
+                          // icon: const Icon(Icons.arrow_back),
+                          label: const Text("ke invoince"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.yellow,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
